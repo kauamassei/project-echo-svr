@@ -3,14 +3,16 @@ import cors from "cors";
 import publicRoutes from './src/routes/publicRoutes.js'
 import privateRoutes from './src/routes/privateRoutes.js'
 
+import auth from './src/middlewares/auth.js'
+
 const app = express();
 const PORT = process.env.PORT || 3333;
 
 app.use(express.json());
 app.use(cors());
 
-app.use('/auth', publicRoutes)
-app.use('/auth', privateRoutes)
+app.use('/', publicRoutes)
+app.use('/', auth, privateRoutes)
 
 
 app.listen(PORT, console.log(`Servidor rodando na porta ${PORT}`));

@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import multer from "multer";
 
 const prisma = new PrismaClient();
+const upload = multer()
 
 export async function showMeUserController(req, res) {
   try {
@@ -36,5 +38,20 @@ export async function listUsersController(req, res) {
     res.status(200).json({ message: "Usuários cadastrados: ", users });
   } catch (error) {
     res.status(500).json({ message: "Falha no servidor" });
+  }
+}
+
+export async function uploadImageController(req, res) {
+  try {
+
+    console.log(req.file)
+
+    
+
+
+
+    res.status(200).json({message: 'Imagem atualizada!'})
+  } catch (error) {
+    res.status(500).json({message: 'Falha no servidor'})
   }
 }

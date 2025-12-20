@@ -67,3 +67,7 @@ export async function uploadImageController(req, res) {
     return res.status(500).json({ message: "Falha no servidor" });
   }
 }
+
+export async function logoutUserController(req, res) {
+  
+}

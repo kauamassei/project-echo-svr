@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname); // ← EXTENSÃO
+    const ext = path.extname(file.originalname);
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
 
     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);

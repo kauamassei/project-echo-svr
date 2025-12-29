@@ -21,4 +21,18 @@ model User {
   password String
   avatar    String? 
   createdAt DateTime @default(now())
+
+  
+  favoriteAgents FavoriteAgent[]
+}
+
+model FavoriteAgent {
+  id         String   @id @default(uuid())
+  userId     Int
+  agentUuid  String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, agentUuid]) // impede favoritar o mesmo agente duas vezes
 }

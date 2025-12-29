@@ -35,7 +35,6 @@ export async function showMeUserController(req, res) {
   }
 }
 
-
 export async function listUsersController(req, res) {
   try {
     const users = await prisma.user.findMany();
@@ -54,7 +53,7 @@ export async function uploadImageController(req, res) {
       return res.status(400).json({ message: "Nenhuma imagem enviada" });
     }
 
-    const avatarPath = `http://localhost:3333/uploads/${req.file.filename}`
+    const avatarPath = `http://localhost:3333/uploads/${req.file.filename}`;
     const user = await prisma.user.update({
       where: { id: userId },
       data: {
@@ -74,6 +73,65 @@ export async function uploadImageController(req, res) {
   }
 }
 
-export async function logoutUserController(req, res) {
-  
+export async function toggleFavoriteAgentController(req, res) {
+  try {
+    const userId = req.user.id;
+    const { agentUuid } = req.body;
+
+    const favorite = await prisma.favoriteAgent.findUnique({
+      where: {
+        userId_agentUuid: {
+          userId,
+          agentUuid,
+        },
+      },
+    });
+
+    if (favorite) {
+      await prisma.favoriteAgent.delete({
+        where: {
+          userId_agentUuid: {
+            userId,
+            agentUuid,
+          },
+        },
+      });
+
+      return res.json({ message: "Agente removido dos favoritos" });
+    }
+
+    await prisma.favoriteAgent.create({
+      data: {
+        userId,
+        agentUuid,
+      },
+    });
+
+    return res.status(201).json({ message: "Agente favoritado" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro no servidor" });
+  }
+}
+
+export async function getFavoriteAgentController(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const favorites = await prisma.favoriteAgent.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        agentUuid: true,
+      },
+    });
+
+    return res.status(200).json({
+      favorites,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro no servidor" });
+  }
 }

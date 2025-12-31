@@ -24,6 +24,8 @@ model User {
 
   
   favoriteAgents FavoriteAgent[]
+  trainingProfiles TrainingProfile[]
+  trainingPlans TrainingPlan[]
 }
 
 model FavoriteAgent {
@@ -35,4 +37,40 @@ model FavoriteAgent {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, agentUuid]) // impede favoritar o mesmo agente duas vezes
+}
+
+model TrainingProfile {
+  id       Int     @id @default(autoincrement())
+  userId   Int
+  rank     String
+  role     String
+  goal     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingPlan TrainingPlan?
+
+}
+
+model TrainingPlan {
+  id                Int      @id @default(autoincrement())
+  userId            Int
+  trainingProfileId Int @unique
+  title             String
+  createdAt         DateTime @default(now())
+
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingProfile  TrainingProfile @relation(fields: [trainingProfileId], references: [id], onDelete: Cascade)
+  sessions        TrainingSession[]
+}
+
+model TrainingSession {
+  id                Int      @id @default(autoincrement())
+  trainingPlanId    Int
+  dayLabel          String
+  focus             String
+  durationMinutes   Int
+  createdAt         DateTime @default(now())
+
+   trainingPlan TrainingPlan @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
 }

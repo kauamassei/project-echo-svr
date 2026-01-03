@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import publicRoutes from './src/routes/publicRoutes.js'
 import privateRoutes from './src/routes/privateRoutes.js'
+import trainingRoutes from "./src/routes/training.routes.js";
 import path from 'path'
 
 import auth from './src/middlewares/auth.js'
@@ -19,6 +20,7 @@ app.use(
 
 
 app.use('/', publicRoutes)
+app.use("/training", auth, trainingRoutes);
 app.use('/', auth, privateRoutes)
 
 

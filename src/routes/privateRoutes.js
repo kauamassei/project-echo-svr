@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteMeUserController,
   getFavoriteAgentController,
   listUsersController,
   showMeUserController,
@@ -14,10 +15,14 @@ router.get("/listar-usuarios", listUsersController);
 
 router.get("/me", showMeUserController);
 
-router.post('/profile', upload.single('image') ,uploadImageController);
+router.get("/favorites/agent", getFavoriteAgentController);
 
-router.post('/favorites/agent', toggleFavoriteAgentController);
+router.post("/profile", upload.single("image"), uploadImageController);
 
-router.get('/favorites/agent', getFavoriteAgentController);
+router.post("/favorites/agent", toggleFavoriteAgentController);
+
+router.delete("/me", deleteMeUserController);
+
+
 
 export default router;

@@ -35,6 +35,28 @@ export async function showMeUserController(req, res) {
   }
 }
 
+export async function deleteMeUserController(req, res) {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Token inválido" });
+    }
+
+    const userId = req.user.id;
+
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    return res.status(200).json({
+      message: "Conta apagada com sucesso",
+    });
+  } catch (error) {
+    console.error("Erro ao apagar conta:", error);
+    return res.status(500).json({ message: "Erro ao apagar conta" });
+  }
+}
+
+
 export async function listUsersController(req, res) {
   try {
     const users = await prisma.user.findMany();
